@@ -17,11 +17,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.NewMemoryActivity"
-            android:parentActivityName=".Activities.HomepageActivity">
+            android:parentActivityName=".Activities.HomepageActivity"
+            android:windowSoftInputMode="adjustPan">
+
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.HomepageActivity" />
+                android:value=".Activities.HomepageActivity"/>
         </activity>
         <activity android:name=".Activities.ViewMemoryActivity"
             android:parentActivityName=".Activities.HomepageActivity">
