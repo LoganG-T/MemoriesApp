@@ -3,10 +3,12 @@ package com.logan.locationrecommender.Activities;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.view.Gravity;
@@ -15,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -23,6 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.logan.locationrecommender.R;
+import com.logan.locationrecommender.memories.Memory;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -32,12 +37,15 @@ public class NewMemoryActivity extends AppCompatActivity {
     private PopupWindow open_popout;
     private View open_popout_view;
     private Calendar memory_calendar;
+    private Memory memory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_memory);
         memory_calendar = Calendar.getInstance();
+
+        memory = new Memory();
 
         New_Current_Date();
     }
@@ -145,13 +153,50 @@ public class NewMemoryActivity extends AppCompatActivity {
         TextView date_display = (TextView)findViewById(R.id.txt_new_display_date);
         memory_calendar = Calendar.getInstance();
         date_display.setText(memory_calendar.get(Calendar.DAY_OF_MONTH) + "/" + (memory_calendar.get(Calendar.MONTH) + 1) + "/" + memory_calendar.get(Calendar.YEAR));
+        memory.SetDate(memory_calendar);
     }
 
     //END Date functions
 
-    public void New_Select_Image(View view){
+    //START Image functions
 
+    public void New_Select_Image(View view){
+        //https://stackoverflow.com/questions/10165302/dialog-to-pick-image-from-gallery-or-from-camera
+        Intent picked_photo = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        picked_photo.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        //Request code is used to respond with onActivityResult, which is dealt with in the switch statement
+        startActivityForResult(picked_photo , 1);
     }
+
+    protected void onActivityResult(int request_code, int result_code, Intent image_intent) {
+        super.onActivityResult(request_code, result_code, image_intent);
+        switch(request_code) {
+            //Photos selected from phone gallery
+            case 1:
+                if(result_code == RESULT_OK){
+                    if(image_intent.getClipData() != null) {
+
+                        int count = image_intent.getClipData().getItemCount(); //evaluate the count before the for loop --- otherwise, the count is evaluated every loop.
+                        for (int i = 0; i < count; i++) {
+                            Uri selected_image = image_intent.getClipData().getItemAt(i).getUri();
+                            //TODO: Save the image into the memory
+                            memory.AddImage(selected_image);
+                        }
+                        //Load the first selected image into the text view on screen
+                        ImageView img = (ImageView)findViewById(R.id.img_new_selected_img);
+                        Picasso.with(getApplicationContext()).load(image_intent.getClipData().getItemAt(0).getUri()).into(img);
+                    }
+                    else if(image_intent.getData() != null){
+                        Uri selected_image = image_intent.getData();
+                        //TODO: Save the image into the memory
+                    }
+                }
+                break;
+        }
+    }
+
+    //END Image functions
 
     public void New_Confirm_Button(View view){
 

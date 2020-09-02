@@ -26,4 +26,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    //picasso is used for image loading into imageviews so they are processed correctly
+    //picasso requires android internet permissions for using images from internet links
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }
