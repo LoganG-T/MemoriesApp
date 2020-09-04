@@ -10,7 +10,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -75,6 +74,10 @@ public class NewMemoryActivity extends AppCompatActivity {
         @Override
         public void onLocationChanged(final Location location) {
             System.out.println("LOCATION CHANGED " + location.getLatitude() + " " + location.getLongitude());
+            String[] s = new String[2];
+            s[0] = Double.toString(location.getLatitude());
+            s[1] = Double.toString(location.getLongitude());
+            memory.SetLocation(s);
             location_manager.removeUpdates(mLocationListener);
         }
 
@@ -199,6 +202,12 @@ public class NewMemoryActivity extends AppCompatActivity {
     //END Image functions
 
     public void New_Confirm_Button(View view){
+        TextView txt_title = findViewById(R.id.txt_new_title);
+        memory.SetTitle(txt_title.getText().toString());
+
+        TextView txt_notes = findViewById(R.id.txt_new_note);
+        memory.SetNotes(txt_notes.getText().toString());
+
 
     }
 }

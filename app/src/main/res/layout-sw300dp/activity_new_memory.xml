@@ -189,7 +189,7 @@
             android:id="@+id/btn_new_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="Confirm_Button"
+            android:onClick="New_Confirm_Button"
             android:text="Confirm" />
 
     </LinearLayout>

@@ -2,6 +2,10 @@ package com.logan.locationrecommender.memories;
 
 import android.net.Uri;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -27,6 +31,33 @@ public class Memory {
 
     }
 
+    public Memory(JSONObject j){
+        try {
+            title = j.getString("title");
+            location = new String[2];
+            location[0] = j.getJSONArray("location").getString(0);
+            location[1] = j.getJSONArray("location").getString(1);
+
+            images = new ArrayList<Uri>();
+            JSONArray json_img = j.getJSONArray("images");
+            for(int i = 0; i < json_img.length(); i++){
+                images.add(Uri.parse(json_img.getString(i)));
+            }
+
+            date = Calendar.getInstance();
+            JSONArray cal = j.getJSONArray("date");
+            int year = cal.getInt(0);
+            int month = cal.getInt(1);
+            int day = cal.getInt(2);
+            date.set(year, month, day);
+
+            notes = j.getString("notes");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     public void SetTitle(String t){
         title = t;
@@ -47,4 +78,34 @@ public class Memory {
         images.add(i);
     }
 
+    public JSONArray GetJsonDate(){
+        JSONArray return_json = new JSONArray();
+
+        return_json.put(date.get(Calendar.YEAR));
+        return_json.put(date.get(Calendar.MONTH));
+        return_json.put(date.get(Calendar.DAY_OF_MONTH));
+
+        return return_json;
+    }
+
+    public JSONArray GetJsonImages(){
+        JSONArray return_json = new JSONArray();
+        for(int i = 0; i < images.size(); i++){
+            return_json.put(images.get(i).toString());
+        }
+
+        return return_json;
+    }
+
+    public JSONObject GetJsonMemory() throws JSONException {
+        JSONObject return_json = new JSONObject();
+        return_json.put("title", title);
+        return_json.put("location", new JSONArray(location));
+        return_json.put("date", GetJsonDate());
+        return_json.put("images", GetJsonImages());
+        return_json.put("notes", notes);
+
+
+        return return_json;
+    }
 }
