@@ -21,6 +21,8 @@ public class Memory {
     List<Uri> images;
     String notes;
 
+    //START Constructors
+
     //default constructor
     public Memory(){
         images = new ArrayList<Uri>();
@@ -55,8 +57,9 @@ public class Memory {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
+
+    //END Constructors
 
 
     public void SetTitle(String t){
@@ -76,6 +79,13 @@ public class Memory {
     }
     public void AddImage(Uri i){
         images.add(i);
+    }
+
+    public int GetYear(){
+        return date.get(Calendar.YEAR);
+    }
+    public int GetMonth(){
+        return date.get(Calendar.MONTH);
     }
 
     public JSONArray GetJsonDate(){
@@ -100,12 +110,31 @@ public class Memory {
     public JSONObject GetJsonMemory() throws JSONException {
         JSONObject return_json = new JSONObject();
         return_json.put("title", title);
-        return_json.put("location", new JSONArray(location));
+        if(location != null){
+            return_json.put("location", new JSONArray(location));
+        }
+        else{
+            return_json.put("location", new JSONArray());
+        }
         return_json.put("date", GetJsonDate());
-        return_json.put("images", GetJsonImages());
+        if(images != null && images.size() > 0) {
+            return_json.put("images", GetJsonImages());
+        }else{
+            return_json.put("images", new JSONArray());
+        }
         return_json.put("notes", notes);
 
 
         return return_json;
+    }
+
+    public String ToString(){
+        String s = "{}";
+        try {
+            s = GetJsonMemory().toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 }

@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.logan.locationrecommender.R;
 import com.logan.locationrecommender.memories.Memory;
+import com.logan.locationrecommender.memories.MemoryHandler;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -38,10 +39,15 @@ public class NewMemoryActivity extends AppCompatActivity {
     private Calendar memory_calendar;
     private Memory memory;
 
+    private MemoryHandler memoryHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_memory);
+
+        memoryHandler = new MemoryHandler();
+
         memory_calendar = Calendar.getInstance();
 
         memory = new Memory();
@@ -128,6 +134,7 @@ public class NewMemoryActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 memory_calendar.set(year, month, dayOfMonth);
+                memory.SetDate(memory_calendar);
             }
         });
 
@@ -202,12 +209,14 @@ public class NewMemoryActivity extends AppCompatActivity {
     //END Image functions
 
     public void New_Confirm_Button(View view){
-        TextView txt_title = findViewById(R.id.txt_new_title);
+        TextView txt_title = findViewById(R.id.edit_new_title);
         memory.SetTitle(txt_title.getText().toString());
 
-        TextView txt_notes = findViewById(R.id.txt_new_note);
+        TextView txt_notes = findViewById(R.id.edit_new_note);
         memory.SetNotes(txt_notes.getText().toString());
 
+        memoryHandler.AddNewMemory(memory);
 
+        memoryHandler.PrintOut();
     }
 }
