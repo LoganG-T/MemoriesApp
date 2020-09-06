@@ -17,7 +17,7 @@ public class MemoryMonth {
         try {
             month = j.getString("month");
             memories = new ArrayList<Memory>();
-            JSONArray json_memories = j.getJSONArray("months");
+            JSONArray json_memories = j.getJSONArray("memories");
             for(int i = 0; i < json_memories.length(); i++){
                 memories.add(new Memory(json_memories.getJSONObject(i)));
             }
@@ -99,7 +99,7 @@ public class MemoryMonth {
     }
 
     public String ToString(){
-        String s = "{\"month\":" + month;
+        String s = "{\"month\":\"" + month + "\"";
         s += ",";
         s += MemoriesToString();
 

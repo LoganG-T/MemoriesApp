@@ -42,6 +42,15 @@ public class MemoryYear {
         }
     }
 
+    // Create an empty memory year object
+    public MemoryYear(int i){
+        year = i;
+        months = new MemoryMonth[12];
+        for(int c = 0; c < 12; c++){
+            months[c] = new MemoryMonth(c);
+        }
+    }
+
     //END Constructors
 
     public int GetYear(){
@@ -57,6 +66,9 @@ public class MemoryYear {
         String s = "\"months\":[";
         for(int c = 0; c < 12; c++){
             s += months[c].ToString();
+            if(c + 1 < 12){
+                s += ",";
+            }
         }
         s += "]";
         return s;

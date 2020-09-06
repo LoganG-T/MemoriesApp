@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.logan.locationrecommender.R;
 import com.logan.locationrecommender.functions.SaveAndLoad;
+import com.logan.locationrecommender.memories.MemoryHandler;
 
 public class HomepageActivity extends AppCompatActivity {
 
@@ -17,9 +18,14 @@ public class HomepageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
-        SaveAndLoad save = new SaveAndLoad();
-        if(! save.CheckFileExists(getApplicationContext(), MEMORY_FILE)){
-            save.CreateNewFile(getApplicationContext(), MEMORY_FILE, "");
+        SaveAndLoad save = new SaveAndLoad(getApplicationContext());
+        if(! save.CheckFileExists(MEMORY_FILE)){
+            System.out.println("File does not exist");
+            save.CreateNewFile(MEMORY_FILE, "");
+        }else{
+            MemoryHandler memoryHandler = new MemoryHandler();
+            memoryHandler.LoadAllMemories(getApplicationContext());
+            memoryHandler.PrintOut();
         }
     }
 
@@ -40,6 +46,8 @@ public class HomepageActivity extends AppCompatActivity {
     }
 
     public void SettingsButton(View view){
+        Intent intent = new Intent(this, SettingsActivity.class);
 
+        startActivity(intent);
     }
 }

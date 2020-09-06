@@ -15,11 +15,13 @@ import java.io.InputStreamReader;
 
 public class SaveAndLoad {
 
-    public void SaveAndLoad(){
+    private Context context;
 
+    public SaveAndLoad(Context c){
+        context = c;
     }
 
-    public boolean Save(Context context, String save_string){
+    public boolean Save(String save_string){
         String FILENAME = "memories.json";
         //String jsonString = jsonHandler.get_jsonString();
 
@@ -40,7 +42,7 @@ public class SaveAndLoad {
         return false;
     }
 
-    public String Load(Context context, String file_name){
+    public String Load(String file_name){
         try {
             FileInputStream fis = context.openFileInput(file_name);
             InputStreamReader isr = new InputStreamReader(fis);
@@ -59,13 +61,13 @@ public class SaveAndLoad {
     }
 
     //https://stackoverflow.com/questions/40168601/android-how-to-save-json-data-in-a-file-and-retrieve-it
-    public boolean CheckFileExists(Context context, String file_name){
+    public boolean CheckFileExists(String file_name){
         String path = context.getFilesDir().getAbsolutePath() + "/" + file_name;
         File file = new File(path);
         return file.exists();
     }
 
-    public boolean CreateNewFile(Context context, String file_name, String json_data){
+    public boolean CreateNewFile(String file_name, String json_data){
 
         //Example json string { "all_dates" :[{"year":2020,"months":[{"month":"january", "data":[]]}, {"year":2019,"months":[]}] }
         String default_json = "{\"all_dates\":[]}";
@@ -87,7 +89,7 @@ public class SaveAndLoad {
         return false;
     }
 
-    public void DeleteFile(Context c, String s){
-        c.deleteFile(s);
+    public void DeleteFile(String s){
+        context.deleteFile(s);
     }
 }

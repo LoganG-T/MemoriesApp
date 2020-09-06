@@ -26,6 +26,9 @@ public class Memory {
     //default constructor
     public Memory(){
         images = new ArrayList<Uri>();
+        location = new String[2];
+        location[0] = "0";
+        location[1] = "0";
     }
 
     //Copy constructor

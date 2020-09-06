@@ -47,6 +47,8 @@ public class NewMemoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_memory);
 
         memoryHandler = new MemoryHandler();
+        memoryHandler.LoadAllMemories(getApplicationContext());
+        memoryHandler.PrintOut();
 
         memory_calendar = Calendar.getInstance();
 
@@ -217,6 +219,11 @@ public class NewMemoryActivity extends AppCompatActivity {
 
         memoryHandler.AddNewMemory(memory);
 
+        memoryHandler.SaveMemories(getApplicationContext());
         memoryHandler.PrintOut();
+
+        // This will takes you back to the home page but the back button takes you back to this page
+        Intent intent = new Intent(this, HomepageActivity.class);
+        startActivity(intent);
     }
 }
