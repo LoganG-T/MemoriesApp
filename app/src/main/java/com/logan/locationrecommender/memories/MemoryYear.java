@@ -62,6 +62,16 @@ public class MemoryYear {
         months[month].AddNewMemory(memory);
     }
 
+    public int GetMonthCount(int m){
+
+        return months[m].MemoryCount();
+    }
+
+    public List<Memory> GetMonthMemories(int m){
+
+        return months[m].GetMemories();
+    }
+
     public String MonthsToString(){
         String s = "\"months\":[";
         for(int c = 0; c < 12; c++){

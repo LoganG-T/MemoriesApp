@@ -43,6 +43,14 @@ public class MemoryMonth {
         memories.add(m);
     }
 
+    public int MemoryCount(){
+        return memories.size();
+    }
+
+    public List<Memory> GetMemories(){
+        return memories;
+    }
+
     private void SetMonth(int m){
         switch (m){
             case 0:

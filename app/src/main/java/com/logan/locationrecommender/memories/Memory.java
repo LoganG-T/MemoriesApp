@@ -84,11 +84,24 @@ public class Memory {
         images.add(i);
     }
 
+    public String GetTextDate(){
+        String s = "";
+        s += date.get(Calendar.DAY_OF_MONTH);
+        s += "/";
+        s += date.get(Calendar.MONTH);
+        s += "/";
+        s += date.get(Calendar.YEAR);
+
+        return s;
+    }
     public int GetYear(){
         return date.get(Calendar.YEAR);
     }
     public int GetMonth(){
         return date.get(Calendar.MONTH);
+    }
+    public String GetTitle(){
+        return title;
     }
 
     public JSONArray GetJsonDate(){

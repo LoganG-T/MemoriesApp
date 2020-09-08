@@ -34,15 +34,23 @@ public class MemoryHandler {
         }
     }
 
-    public void LoadYearMemories(Context context, int year){
+    public boolean LoadYearMemories(Context context, int year){
         SaveAndLoad save = new SaveAndLoad(context);
         try {
             json_all_dates = new JSONObject(save.Load("memories.json"));
-            json_array = json_all_dates.getJSONArray("all_dates");
-            CreateDates(year);
+            for(int i = 0; i < json_all_dates.getJSONArray("all_dates").length(); i++){
+                if(json_all_dates.getJSONArray("all_dates").getJSONObject(i).getInt("year") == year){
+                    json_array = new JSONArray();
+                    json_array.put(json_all_dates.getJSONArray("all_dates").getJSONObject(i));
+                    CreateDates(year);
+                    return true;
+                }
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public void CreateDates() throws JSONException {
@@ -98,6 +106,27 @@ public class MemoryHandler {
         for(int i = 0; i < json_array.length(); i++){
             if(json_array.getJSONObject(i).getInt("year") == year){
                 return json_array.getJSONObject(i).getJSONArray("months");
+            }
+        }
+        return null;
+    }
+
+    public int GetMonthCount(int year, int month){
+
+        for(int i = 0; i < all_dates.size(); i++){
+            if(all_dates.get(i).GetYear() == year){
+                return all_dates.get(i).GetMonthCount(month);
+            }
+        }
+
+        return -1;
+    }
+
+    //Returns a list of memories for that month or null if the year does not exist
+    public List<Memory> GetMonthMemories(int year, int month){
+        for(int i = 0; i < all_dates.size(); i++){
+            if(all_dates.get(i).GetYear() == year){
+                return all_dates.get(i).GetMonthMemories(month);
             }
         }
         return null;
