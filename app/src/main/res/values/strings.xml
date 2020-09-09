@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LocationRecommender</string>
+    <string name="template_date">27/10/2020</string>
 </resources>

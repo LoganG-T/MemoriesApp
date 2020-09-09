@@ -103,6 +103,26 @@ public class Memory {
     public String GetTitle(){
         return title;
     }
+    public String GetNotes(){
+        return notes;
+    }
+    public Uri GetFirstImage(){
+        return images.get(0);
+    }
+    public String GetLocationString(){
+        String s = "";
+        s += location[0];
+        s += ",";
+        s += location[1];
+        if(s.equals("0,0")){
+            return "";
+        }
+        return s;
+    }
+
+    public boolean IsImages(){
+        return images.size() > 0;
+    }
 
     public JSONArray GetJsonDate(){
         JSONArray return_json = new JSONArray();
