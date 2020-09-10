@@ -1,9 +1,15 @@
 package com.logan.locationrecommender.Activities;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,7 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.logan.locationrecommender.R;
 import com.logan.locationrecommender.memories.Memory;
 import com.logan.locationrecommender.memories.MemoryHandler;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 
@@ -70,8 +78,22 @@ public class ViewMemoryActivity extends AppCompatActivity {
             }
             else if(hor_lay.getChildAt(i).getTag().equals("image")){
                 if(m.IsImages()) {
-                    ImageView t = (ImageView) hor_lay.getChildAt(i);
-                    t.setImageURI(m.GetFirstImage());
+                    System.out.println("Loaded image");
+                    if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                        int REQUEST_CODE = 7;
+                        requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+                    }else {
+                        ImageView t = (ImageView) hor_lay.getChildAt(i);
+                        String s = m.GetFirstImage();
+                        System.out.println("FILE PATH STRING " + s + " | " + m.GetFirstImage());
+                        System.out.println("FILE PATH SNG " + Environment.getExternalStorageDirectory());
+                        File f = new File(s);
+                        Uri uri = Uri.fromFile(f);
+                        Picasso.with(getApplicationContext()).load(uri).into(t);
+                        //Picasso.with(getApplicationContext()).load("file://"+s).into(t);
+                        //Picasso.with(getApplicationContext()).load(f).into(t);
+                        //t.setImageURI(uri);
+                    }
                 }else{
                     ImageView t = (ImageView) hor_lay.getChildAt(i);
                     t.setVisibility(View.INVISIBLE);
@@ -122,6 +144,23 @@ public class ViewMemoryActivity extends AppCompatActivity {
                 TextView t = (TextView)lay_display.getChildAt(i);
                 t.setText(m.GetLocationString());
             }
+        }
+    }
+
+
+
+
+
+    // IMAGE URI INTENT
+    protected void onActivityResult(int request_code, int result_code, Intent image_intent) {
+        super.onActivityResult(request_code, result_code, image_intent);
+        switch(request_code) {
+            //Photos selected from phone gallery
+            case 1:
+                if(result_code == RESULT_OK){
+                    System.out.println("!!! " + image_intent.getExtras().size());
+                }
+                break;
         }
     }
 }

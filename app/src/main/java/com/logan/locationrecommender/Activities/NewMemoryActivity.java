@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -65,9 +67,7 @@ public class NewMemoryActivity extends AppCompatActivity {
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             System.out.println("LOCATION DENIED ");
             int REQUEST_CODE = 1;
-            requestPermissions(new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, REQUEST_CODE);
-            requestPermissions(new String[] { Manifest.permission.ACCESS_COARSE_LOCATION }, REQUEST_CODE);
-            requestPermissions(new String[] { Manifest.permission.INTERNET }, REQUEST_CODE);
+            requestPermissions(new String[] { Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.INTERNET }, REQUEST_CODE);
             return;
         }
         location_manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
@@ -192,8 +192,10 @@ public class NewMemoryActivity extends AppCompatActivity {
                         int count = image_intent.getClipData().getItemCount(); //evaluate the count before the for loop --- otherwise, the count is evaluated every loop.
                         for (int i = 0; i < count; i++) {
                             Uri selected_image = image_intent.getClipData().getItemAt(i).getUri();
+                            String image_path = GetPath(getApplicationContext( ), selected_image);
+                            System.out.println("!!! " + image_path);
                             //TODO: Save the image into the memory
-                            memory.AddImage(selected_image);
+                            memory.AddImage(image_path);
                         }
                         //Load the first selected image into the text view on screen
                         ImageView img = (ImageView)findViewById(R.id.img_new_selected_img);
@@ -206,6 +208,21 @@ public class NewMemoryActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    //https://stackoverflow.com/questions/20324155/get-filepath-and-filename-of-selected-gallery-image-in-android
+    private String GetPath(Context context, Uri uri){
+        String result = "";
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver( ).query( uri, proj, null, null, null );
+        if(cursor != null){
+            if ( cursor.moveToFirst( ) ) {
+                int column_index = cursor.getColumnIndexOrThrow( proj[0] );
+                result = cursor.getString( column_index );
+            }
+            cursor.close( );
+        }
+        return result;
     }
 
     //END Image functions
