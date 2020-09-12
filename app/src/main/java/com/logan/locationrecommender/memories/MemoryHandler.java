@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -130,6 +131,16 @@ public class MemoryHandler {
             }
         }
         return null;
+    }
+
+    public List<String> GetAllYearsString(){
+        List<String> years = new ArrayList<String>();
+
+        for(int i = 0; i < all_dates.size(); i++){
+            years.add(Integer.toString(all_dates.get(i).GetYear()));
+        }
+
+        return years;
     }
 
     public void PrintOut(){

@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.logan.locationrecommender.R;
 import com.logan.locationrecommender.functions.MonthSpinner;
+import com.logan.locationrecommender.functions.YearSpinner;
 import com.logan.locationrecommender.memories.Memory;
 import com.logan.locationrecommender.memories.MemoryHandler;
 import com.squareup.picasso.Picasso;
@@ -42,7 +43,16 @@ public class ViewMemoryActivity extends AppCompatActivity {
 
 
         MonthSpinner m_spin = new MonthSpinner(this);
-        m_spin.CreateSpinner(R.id.spin_view_month);
+        m_spin.CreateSpinner(R.id.spin_view_month, calendar.get(Calendar.MONTH));
+
+
+        MemoryHandler memory_handler = new MemoryHandler();
+        memory_handler.LoadAllMemories(getApplicationContext());
+        List<String> years = memory_handler.GetAllYearsString();
+
+
+        YearSpinner y_spin = new YearSpinner(this, years);
+        y_spin.CreateSpinner(R.id.spin_view_year);
 
         EditText edit_text = findViewById(R.id.edit_view_title);
         edit_text.addTextChangedListener(new TextWatcher() {
@@ -70,6 +80,12 @@ public class ViewMemoryActivity extends AppCompatActivity {
             }
         });
 
+        //LoadMonthMemories();
+    }
+
+    public void SetSelectedYear(int year){
+        calendar.set(Calendar.YEAR, year);
+        ClearMemories();
         LoadMonthMemories();
     }
 

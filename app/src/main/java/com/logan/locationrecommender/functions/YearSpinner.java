@@ -11,42 +11,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.logan.locationrecommender.Activities.ViewMemoryActivity;
 import com.logan.locationrecommender.R;
 
-import java.util.Calendar;
+import java.util.List;
 
-
-public class MonthSpinner extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class YearSpinner extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
     }
 
-    public MonthSpinner(ViewMemoryActivity vm){
+    public YearSpinner(ViewMemoryActivity vm, List<String> s){
         view_class = vm;
+        years = s;
     }
 
     ViewMemoryActivity view_class;
+    List<String> years;
 
-    public void CreateSpinner(int r_id, int month){
+    public void CreateSpinner(int r_id){
         view_class.SetSelectedMonth(0);
         Spinner spinner = (Spinner) view_class.findViewById(r_id);
 
         spinner.setOnItemSelectedListener(this);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view_class,
-                R.array.months_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(view_class,
+                android.R.layout.simple_spinner_item, years);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(adapter);
-
-        spinner.setSelection(month);
     }
 
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        view_class.SetSelectedMonth(position);
+        view_class.SetSelectedYear(Integer.parseInt(years.get(position)));
     }
 
     @Override
