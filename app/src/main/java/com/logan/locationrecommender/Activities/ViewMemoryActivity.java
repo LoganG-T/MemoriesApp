@@ -1,6 +1,7 @@
 package com.logan.locationrecommender.Activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.logan.locationrecommender.R;
+import com.logan.locationrecommender.functions.MonthSpinner;
 import com.logan.locationrecommender.memories.Memory;
 import com.logan.locationrecommender.memories.MemoryHandler;
 import com.squareup.picasso.Picasso;
@@ -37,6 +39,10 @@ public class ViewMemoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_memory);
         calendar = Calendar.getInstance();
+
+
+        MonthSpinner m_spin = new MonthSpinner(this);
+        m_spin.CreateSpinner(R.id.spin_view_month);
 
         EditText edit_text = findViewById(R.id.edit_view_title);
         edit_text.addTextChangedListener(new TextWatcher() {
@@ -65,6 +71,17 @@ public class ViewMemoryActivity extends AppCompatActivity {
         });
 
         LoadMonthMemories();
+    }
+
+    public void SetSelectedMonth(int month){
+        calendar.set(Calendar.MONTH, month);
+        ClearMemories();
+        LoadMonthMemories();
+    }
+
+    private void ClearMemories(){
+        LinearLayout linear_layout = findViewById(R.id.linlay_view_all_memories);
+        linear_layout.removeAllViews();
     }
 
     private void LoadMonthMemories(){
