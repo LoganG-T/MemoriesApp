@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,7 +33,9 @@ import com.logan.locationrecommender.memories.Memory;
 import com.logan.locationrecommender.memories.MemoryHandler;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 
 public class NewMemoryActivity extends AppCompatActivity {
 
@@ -85,6 +89,22 @@ public class NewMemoryActivity extends AppCompatActivity {
             String[] s = new String[2];
             s[0] = Double.toString(location.getLatitude());
             s[1] = Double.toString(location.getLongitude());
+            try {
+                //Get the current location from lat/long to name
+                //Info on setting up google maps API ::
+                //https://console.cloud.google.com/apis/credentials
+                //https://www.tutorialspoint.com/how-to-show-current-location-on-a-google-map-on-android
+                //https://developer.android.com/reference/android/location/Geocoders
+                Geocoder geocoder = new Geocoder(getApplicationContext());
+                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                String cityName = addresses.get(0).getAddressLine(0);
+                String stateName = addresses.get(0).getAddressLine(1);
+                String countryName = addresses.get(0).getAddressLine(2);
+                System.out.println("LOCATION " + cityName + " " + stateName + " " + countryName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             memory.SetLocation(s);
             location_manager.removeUpdates(mLocationListener);
         }
@@ -230,6 +250,9 @@ public class NewMemoryActivity extends AppCompatActivity {
     public void New_Confirm_Button(View view){
         TextView txt_title = findViewById(R.id.edit_new_title);
         memory.SetTitle(txt_title.getText().toString());
+        if(memory.GetTitle().equals("")){
+            memory.SetTitle(memory.GetTextDate());
+        }
 
         TextView txt_notes = findViewById(R.id.edit_new_note);
         memory.SetNotes(txt_notes.getText().toString());

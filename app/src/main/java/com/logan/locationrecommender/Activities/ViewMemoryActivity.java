@@ -6,9 +6,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +37,32 @@ public class ViewMemoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_memory);
         calendar = Calendar.getInstance();
+
+        EditText edit_text = findViewById(R.id.edit_view_title);
+        edit_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                LinearLayout linear_layout = findViewById(R.id.linlay_view_all_memories);
+                for(int i = 0; i < linear_layout.getChildCount(); i++){
+                    if(! linear_layout.getChildAt(i).getTag().toString().toLowerCase().contains(s.toString().toLowerCase())){
+                        linear_layout.getChildAt(i).setVisibility(View.GONE);
+                    }else{
+                        linear_layout.getChildAt(i).setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         LoadMonthMemories();
     }
@@ -75,24 +104,19 @@ public class ViewMemoryActivity extends AppCompatActivity {
             if(hor_lay.getChildAt(i).getTag().equals("title")){
                 TextView t = (TextView)hor_lay.getChildAt(i);
                 t.setText(m.GetTitle());
+                new_layout.setTag(m.GetTitle());
             }
             else if(hor_lay.getChildAt(i).getTag().equals("image")){
                 if(m.IsImages()) {
-                    System.out.println("Loaded image");
                     if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                         int REQUEST_CODE = 7;
                         requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
                     }else {
                         ImageView t = (ImageView) hor_lay.getChildAt(i);
                         String s = m.GetFirstImage();
-                        System.out.println("FILE PATH STRING " + s + " | " + m.GetFirstImage());
-                        System.out.println("FILE PATH SNG " + Environment.getExternalStorageDirectory());
                         File f = new File(s);
                         Uri uri = Uri.fromFile(f);
                         Picasso.with(getApplicationContext()).load(uri).into(t);
-                        //Picasso.with(getApplicationContext()).load("file://"+s).into(t);
-                        //Picasso.with(getApplicationContext()).load(f).into(t);
-                        //t.setImageURI(uri);
                     }
                 }else{
                     ImageView t = (ImageView) hor_lay.getChildAt(i);
