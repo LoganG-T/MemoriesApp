@@ -9,7 +9,6 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.logan.locationrecommender.Activities.ViewMemoryActivity;
-import com.logan.locationrecommender.R;
 
 import java.util.List;
 

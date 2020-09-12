@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.logan.locationrecommender.Activities.ViewMemoryActivity;
 import com.logan.locationrecommender.R;
 
-import java.util.Calendar;
-
 
 public class MonthSpinner extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
